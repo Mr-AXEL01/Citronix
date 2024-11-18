@@ -5,7 +5,7 @@ spring:
       ddl-auto: create-drop
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/citronix
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
