@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/citronix-prod
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  show-sql: false
+  properties:
+    hibernate:
+      format_sql: false
