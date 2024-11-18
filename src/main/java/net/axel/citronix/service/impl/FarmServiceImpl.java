@@ -4,10 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.FarmRequestDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
+import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.mapper.FarmMapper;
 import net.axel.citronix.repository.FarmRepository;
 import net.axel.citronix.service.FarmService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -21,6 +24,11 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public FarmResponseDTO create(FarmRequestDTO dto) {
-        return null;
+        Farm farm = mapper.toEntity(dto)
+                .setCreationDate(LocalDate.now());
+
+        Farm savedFarm = repository.save(farm);
+
+        return mapper.toResponseDto(savedFarm);
     }
 }
