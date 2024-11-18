@@ -1,1 +1,7 @@
-spring.application.name=CITRONIX
+spring:
+  application:
+    name: CITRONIX
+
+  profiles:
+    default: dev
+    active:
