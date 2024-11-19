@@ -25,10 +25,14 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmResponseDTO create(FarmRequestDTO dto) {
         Farm farm = mapper.toEntity(dto)
-                .setCreationDate(LocalDate.now());
+                .setCreationDate(getDefult(dto.creationDate(), LocalDate.now()));
 
         Farm savedFarm = repository.save(farm);
 
         return mapper.toResponseDto(savedFarm);
+    }
+
+    private <T> T getDefult(T v, T dv) {
+        return v != null ? v : dv;
     }
 }
