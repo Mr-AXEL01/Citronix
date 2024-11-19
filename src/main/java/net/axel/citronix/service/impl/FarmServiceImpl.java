@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.FarmRequestDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.UpdateFarmDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;
@@ -34,15 +35,24 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public FarmResponseDTO update(Long id, FarmRequestDTO dto) {
-        Farm farm = repository.findById(id)
+    public FarmResponseDTO update(Long id, UpdateFarmDTO dto) {
+        Farm existingFarm = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", id));
 
-        farm.setLocation(dto.location())
-                .setSize(dto.size())
-                .setCreationDate(dto.creationDate());
+        if (dto.name() != null) {
+            existingFarm.setName(dto.name());
+        }
+        if (dto.location() != null) {
+            existingFarm.setLocation(dto.location());
+        }
+        if (dto.size() != null) {
+            existingFarm.setSize(dto.size());
+        }
+        if (dto.creationDate() != null) {
+            existingFarm.setCreationDate(dto.creationDate());
+        }
 
-        Farm savedFarm = repository.save(farm);
+        Farm savedFarm = repository.save(existingFarm);
         return mapper.toResponseDto(savedFarm);
     }
 
