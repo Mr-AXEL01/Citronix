@@ -27,7 +27,7 @@ public class FarmController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FarmResponseDTO> update(@PathVariable("id") Long id, @RequestBody @valid FarmRequestDTO dto) {
+    public ResponseEntity<FarmResponseDTO> update(@PathVariable("id") Long id, @RequestBody @Valid FarmRequestDTO dto) {
         FarmResponseDTO updatedFarm = service.update(id, dto);
         return ResponseEntity.ok(updatedFarm);
     }
