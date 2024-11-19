@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.FarmRequestDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
 import net.axel.citronix.domain.entities.Farm;
+import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;
 import net.axel.citronix.repository.FarmRepository;
 import net.axel.citronix.service.FarmService;
@@ -29,6 +30,19 @@ public class FarmServiceImpl implements FarmService {
 
         Farm savedFarm = repository.save(farm);
 
+        return mapper.toResponseDto(savedFarm);
+    }
+
+    @Override
+    public FarmResponseDTO update(Long id, FarmRequestDTO dto) {
+        Farm farm = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", id));
+
+        farm.setLocation(dto.location())
+                .setSize(dto.size())
+                .setCreationDate(dto.creationDate());
+
+        Farm savedFarm = repository.save(farm);
         return mapper.toResponseDto(savedFarm);
     }
 
