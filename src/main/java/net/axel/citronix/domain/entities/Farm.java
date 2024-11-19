@@ -33,5 +33,6 @@ public class Farm implements Serializable {
 
     private LocalDate creationDate;
 
-//    private List<Field> fields = new ArrayList<>();
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
+    private List<Field> fields = new ArrayList<>();
 }
