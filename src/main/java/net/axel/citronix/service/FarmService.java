@@ -6,6 +6,8 @@ import net.axel.citronix.domain.dtos.UpdateFarmDTO;
 
 public interface FarmService {
 
+    FarmResponseDTO findById(Long id);
+
     FarmResponseDTO create(CreateFarmDTO dto);
 
     FarmResponseDTO update(Long id, UpdateFarmDTO dto);

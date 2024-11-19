@@ -18,6 +18,12 @@ public class FarmController {
     public final static String CONTROLLER_PATH = "/api/v1/farms";
 
     private final FarmService service;
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<FarmResponseDTO> findById(@PathVariable("id") Long id) {
+        FarmResponseDTO farm = service.findById(id);
+        return new ResponseEntity<>(farm, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<FarmResponseDTO> create(@RequestBody @Valid CreateFarmDTO dto) {

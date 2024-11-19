@@ -25,6 +25,14 @@ public class FarmServiceImpl implements FarmService {
 
 
     @Override
+    public FarmResponseDTO findById(Long id) {
+        Farm farm = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", id));
+
+        return mapper.toResponseDto(farm);
+    }
+
+    @Override
     public FarmResponseDTO create(CreateFarmDTO dto) {
         Farm farm = mapper.toEntity(dto)
                 .setCreationDate(getDefult(dto.creationDate(), LocalDate.now()));
