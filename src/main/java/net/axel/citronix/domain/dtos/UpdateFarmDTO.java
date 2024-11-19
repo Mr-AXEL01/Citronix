@@ -7,6 +7,7 @@ import net.axel.citronix.validation.IsUnique;
 import java.time.LocalDate;
 
 public record UpdateFarmDTO(
+
         @IsUnique(entityClass = Farm.class, fieldName = "name", message = "Try using a new name")
         @Pattern(regexp = "\\S.*", message = "Name cannot be blank or contain only whitespace")
         String name,
