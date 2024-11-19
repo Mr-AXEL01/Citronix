@@ -5,4 +5,5 @@ import net.axel.citronix.domain.dtos.FarmResponseDTO;
 
 public interface FarmService {
     FarmResponseDTO create(FarmRequestDTO dto);
+    FarmResponseDTO update(FarmRequestDTO dto);
 }
