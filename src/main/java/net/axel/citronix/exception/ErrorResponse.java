@@ -7,6 +7,7 @@ public record ErrorResponse(
         int statusCode,
         LocalDateTime timestamp,
         String message,
-        String description
+        String description,
+        Object errors
 ) {
 }
