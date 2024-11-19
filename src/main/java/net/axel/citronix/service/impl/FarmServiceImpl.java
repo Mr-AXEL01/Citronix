@@ -2,7 +2,7 @@ package net.axel.citronix.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.FarmRequestDTO;
+import net.axel.citronix.domain.dtos.CreateFarmDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
 import net.axel.citronix.domain.dtos.UpdateFarmDTO;
 import net.axel.citronix.domain.entities.Farm;
@@ -25,7 +25,7 @@ public class FarmServiceImpl implements FarmService {
 
 
     @Override
-    public FarmResponseDTO create(FarmRequestDTO dto) {
+    public FarmResponseDTO create(CreateFarmDTO dto) {
         Farm farm = mapper.toEntity(dto)
                 .setCreationDate(getDefult(dto.creationDate(), LocalDate.now()));
 

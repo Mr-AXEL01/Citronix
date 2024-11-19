@@ -9,7 +9,7 @@ import net.axel.citronix.validation.IsUnique;
 
 import java.time.LocalDate;
 
-public record FarmRequestDTO(
+public record CreateFarmDTO(
 
         @IsUnique(entityClass = Farm.class, fieldName = "name", message = "This name is already in use")
         @NotBlank String name,

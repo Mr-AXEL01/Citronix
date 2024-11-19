@@ -2,13 +2,11 @@ package net.axel.citronix.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.FarmRequestDTO;
+import net.axel.citronix.domain.dtos.CreateFarmDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
 import net.axel.citronix.domain.dtos.UpdateFarmDTO;
-import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.service.FarmService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +20,7 @@ public class FarmController {
     private final FarmService service;
 
     @PostMapping
-    public ResponseEntity<FarmResponseDTO> create(@RequestBody @Valid FarmRequestDTO dto) {
+    public ResponseEntity<FarmResponseDTO> create(@RequestBody @Valid CreateFarmDTO dto) {
         FarmResponseDTO farm = service.create(dto);
         return new ResponseEntity<>(farm, HttpStatus.CREATED);
     }
