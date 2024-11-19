@@ -4,14 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.FarmRequestDTO;
 import net.axel.citronix.domain.dtos.FarmResponseDTO;
+import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.service.FarmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(FarmController.CONTROLLER_PATH)
@@ -26,5 +24,11 @@ public class FarmController {
     public ResponseEntity<FarmResponseDTO> create(@RequestBody @Valid FarmRequestDTO dto) {
         FarmResponseDTO farm = service.create(dto);
         return new ResponseEntity<>(farm, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FarmResponseDTO> update(@PathVariable("id") Long id, @RequestBody @valid FarmRequestDTO dto) {
+        FarmResponseDTO updatedFarm = service.update(id, dto);
+        return ResponseEntity.ok(updatedFarm);
     }
 }
