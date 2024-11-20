@@ -23,7 +23,7 @@ public class Field implements Serializable {
 
     private Double area;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "farm_id")
     private Farm farm;
 }
