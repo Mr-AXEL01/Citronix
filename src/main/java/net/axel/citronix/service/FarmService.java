@@ -1,8 +1,8 @@
 package net.axel.citronix.service;
 
-import net.axel.citronix.domain.dtos.CreateFarmDTO;
-import net.axel.citronix.domain.dtos.FarmResponseDTO;
-import net.axel.citronix.domain.dtos.UpdateFarmDTO;
+import net.axel.citronix.domain.dtos.farm.CreateFarmDTO;
+import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.farm.UpdateFarmDTO;
 
 public interface FarmService {
 

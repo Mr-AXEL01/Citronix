@@ -2,9 +2,9 @@ package net.axel.citronix.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.CreateFarmDTO;
-import net.axel.citronix.domain.dtos.FarmResponseDTO;
-import net.axel.citronix.domain.dtos.UpdateFarmDTO;
+import net.axel.citronix.domain.dtos.farm.CreateFarmDTO;
+import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.farm.UpdateFarmDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;

@@ -1,7 +1,7 @@
 package net.axel.citronix.mapper;
 
-import net.axel.citronix.domain.dtos.CreateFieldDTO;
-import net.axel.citronix.domain.dtos.FieldResponseDTO;
+import net.axel.citronix.domain.dtos.field.CreateFieldDTO;
+import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.domain.entities.Field;
 import org.mapstruct.Mapper;
 

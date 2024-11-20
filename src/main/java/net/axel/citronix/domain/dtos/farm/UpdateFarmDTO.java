@@ -1,4 +1,4 @@
-package net.axel.citronix.domain.dtos;
+package net.axel.citronix.domain.dtos.farm;
 
 import jakarta.validation.constraints.*;
 import net.axel.citronix.domain.entities.Farm;

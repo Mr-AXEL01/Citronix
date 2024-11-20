@@ -1,7 +1,7 @@
 package net.axel.citronix.mapper;
 
-import net.axel.citronix.domain.dtos.CreateFarmDTO;
-import net.axel.citronix.domain.dtos.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.farm.CreateFarmDTO;
+import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
 import net.axel.citronix.domain.entities.Farm;
 import org.mapstruct.Mapper;
 

@@ -2,9 +2,9 @@ package net.axel.citronix.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.CreateFieldDTO;
-import net.axel.citronix.domain.dtos.FarmResponseDTO;
-import net.axel.citronix.domain.dtos.FieldResponseDTO;
+import net.axel.citronix.domain.dtos.field.CreateFieldDTO;
+import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.exception.domains.BusinessException;

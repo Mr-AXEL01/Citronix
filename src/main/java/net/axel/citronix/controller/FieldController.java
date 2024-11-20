@@ -2,8 +2,8 @@ package net.axel.citronix.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.CreateFieldDTO;
-import net.axel.citronix.domain.dtos.FieldResponseDTO;
+import net.axel.citronix.domain.dtos.field.CreateFieldDTO;
+import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.service.FieldService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

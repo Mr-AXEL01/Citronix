@@ -1,4 +1,4 @@
-package net.axel.citronix.domain.dtos;
+package net.axel.citronix.domain.dtos.field;
 
 import jakarta.validation.constraints.NotNull;
 
