@@ -25,6 +25,7 @@ public class Harvest implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private Season season;
 
     private LocalDate harvestDate;
