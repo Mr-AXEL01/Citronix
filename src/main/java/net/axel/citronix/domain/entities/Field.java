@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "fields")
@@ -24,6 +26,9 @@ public class Field implements Serializable {
     private Double area;
 
     @ManyToOne
-    @JoinColumn(name = "farm_id")
+    @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
+
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    private List<Tree> trees = new ArrayList<>();
 }
