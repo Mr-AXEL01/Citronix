@@ -1,5 +1,6 @@
 package net.axel.citronix.exception;
 
+import net.axel.citronix.exception.domains.BusinessException;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -45,6 +46,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now(),
                 ENTITY_NOT_FOUND_MESSAGE,
+                request.getDescription(false),
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBusinessException(BusinessException ex, WebRequest request) {
+        return new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                "Business rule violation",
                 request.getDescription(false),
                 ex.getMessage()
         );
