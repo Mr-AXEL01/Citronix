@@ -24,7 +24,7 @@ public class Sale implements Serializable {
 
     private LocalDate date;
 
-    private Double UnitPrice;
+    private Double unitPrice;
 
     private String client;
 
