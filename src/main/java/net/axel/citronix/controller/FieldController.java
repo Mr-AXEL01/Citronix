@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(FieldController.CONTROLLER_PATH)
 
@@ -32,10 +34,22 @@ public class FieldController {
         return ResponseEntity.ok(farm);
     }
 
+    @GetMapping
+    public ResponseEntity<List<FieldResponseDTO>> findAll() {
+        List<FieldResponseDTO> fields = service.findAll();
+        return ResponseEntity.ok(fields);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<FieldResponseDTO> update(@PathVariable("id") Long id,
                                                    @RequestBody @Valid UpdateFieldDTO dto) {
         FieldResponseDTO updatedField = service.update(id, dto);
         return ResponseEntity.ok(updatedField);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
