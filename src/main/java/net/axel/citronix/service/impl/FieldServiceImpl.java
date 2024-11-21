@@ -8,6 +8,7 @@ import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.exception.domains.BusinessException;
+import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;
 import net.axel.citronix.mapper.FieldMapper;
 import net.axel.citronix.repository.FieldRepository;
@@ -25,6 +26,14 @@ public class FieldServiceImpl implements FieldService {
     private final FieldMapper mapper;
     private final FarmService farmService;
     private final FarmMapper farmMapper;
+
+    @Override
+    public FieldResponseDTO findById(Long id) {
+        Field field = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Field", id));
+
+        return mapper.toResponseDto(field);
+    }
 
     @Override
     public FieldResponseDTO create(CreateFieldDTO dto) {

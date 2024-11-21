@@ -6,4 +6,6 @@ import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 public interface FieldService {
 
     FieldResponseDTO create(CreateFieldDTO dto);
+
+    FieldResponseDTO findById(Long id);
 }
