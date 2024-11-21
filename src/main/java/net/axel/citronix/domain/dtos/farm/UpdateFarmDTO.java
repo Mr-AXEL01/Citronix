@@ -15,7 +15,8 @@ public record UpdateFarmDTO(
         @Pattern(regexp = "\\S.*", message = "Location cannot be blank or contain only whitespace")
         String location,
 
-        @Positive Double size,
+        @DecimalMin(value = "0.2", inclusive = true, message = "Farm size must be at least 0.2 hectares")
+        Double size,
 
         @PastOrPresent(message = "Creation date must be in the past or today")
         LocalDate creationDate
