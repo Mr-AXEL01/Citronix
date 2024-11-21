@@ -17,6 +17,10 @@ import net.axel.citronix.service.FarmService;
 import net.axel.citronix.service.FieldService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 
@@ -34,6 +38,19 @@ public class FieldServiceImpl implements FieldService {
                 .orElseThrow(() -> new ResourceNotFoundException("Field", id));
 
         return mapper.toResponseDto(field);
+    }
+
+    @Override
+    public List<FieldResponseDTO> findAll() {
+        List<Field> fieldEntities = repository.findAll();
+
+        if (fieldEntities.isEmpty()) {
+            throw new ResourceNotFoundException("No fields founds.");
+        }
+
+        return fieldEntities.stream()
+                .map(mapper::toResponseDto)
+                .toList();
     }
 
     @Override
@@ -68,6 +85,11 @@ public class FieldServiceImpl implements FieldService {
 
         Field savedField = repository.save(existingField);
         return mapper.toResponseDto(savedField);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 
     private Farm getFarm(Long farmId) {
