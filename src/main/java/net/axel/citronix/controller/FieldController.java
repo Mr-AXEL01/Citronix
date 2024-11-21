@@ -7,10 +7,7 @@ import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.service.FieldService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(FieldController.CONTROLLER_PATH)
@@ -26,5 +23,11 @@ public class FieldController {
     public ResponseEntity<FieldResponseDTO> create(@RequestBody @Valid CreateFieldDTO dto) {
         FieldResponseDTO field = service.create(dto);
         return new ResponseEntity<>(field, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FieldResponseDTO> findById(@PathVariable("id") Long id) {
+        FieldResponseDTO farm = service.findById(id);
+        return ResponseEntity.ok(farm);
     }
 }
