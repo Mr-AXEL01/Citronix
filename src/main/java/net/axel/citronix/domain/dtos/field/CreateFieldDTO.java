@@ -7,7 +7,7 @@ import net.axel.citronix.validation.Exists;
 
 public record CreateFieldDTO(
 
-        @DecimalMin(value = "0.1", message = "Area must be at least 0.1")
+        @DecimalMin(value = "0.1", message = "Area must be at least 0.1 hectares.")
         @NotNull Double area,
 
         @Exists(entityClass = Farm.class, fieldName = "id", message = "Farm does not exists.")
