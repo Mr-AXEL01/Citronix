@@ -1,9 +1,6 @@
 package net.axel.citronix.domain.dtos.farm;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.validation.IsUnique;
 
@@ -16,7 +13,8 @@ public record CreateFarmDTO(
 
         @NotBlank String location,
 
-        @NotNull @Positive Double size,
+        @DecimalMin(value = "0.2", inclusive = true, message = "Farm size must be at least 0.2 hectares")
+        @NotNull Double size,
 
         @PastOrPresent(message = "Creation date must be in the past or today")
         LocalDate creationDate
