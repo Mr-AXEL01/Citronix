@@ -31,6 +31,17 @@ public class FieldServiceImpl implements FieldService {
         FarmResponseDTO farmResponse = farmService.findById(dto.farmId());
         Farm farm = farmMapper.toEntityFromResponseDto(farmResponse);
 
+        fieldValidations(dto, farm);
+
+        Field field = mapper.toEntity(dto)
+                .setFarm(farm);
+
+        Field savedRepository = repository.save(field);
+
+        return mapper.toResponseDto(savedRepository);
+    }
+
+    private void fieldValidations(CreateFieldDTO dto, Farm farm) {
         if (dto.area() > (farm.getSize() * 0.5)) {
             throw new BusinessException("Field area cannot exceed 50% of the farm's total size.");
         }
@@ -39,11 +50,13 @@ public class FieldServiceImpl implements FieldService {
             throw new BusinessException("A farm cannot contain more than 10 fields.");
         }
 
-        Field field = mapper.toEntity(dto)
-                .setFarm(farm);
+        double fieldsAreaSum = farm.getFields()
+                .stream()
+                .mapToDouble(Field::getArea)
+                .sum() + dto.area();
 
-        Field savedRepository = repository.save(field);
-
-        return mapper.toResponseDto(savedRepository);
+        if (fieldsAreaSum > farm.getSize()) {
+            throw new BusinessException(farm.getName() + " Farm had insufficient space for this field.");
+        }
     }
 }
