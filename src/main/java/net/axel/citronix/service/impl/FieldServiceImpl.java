@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.field.CreateFieldDTO;
 import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
 import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
+import net.axel.citronix.domain.dtos.field.UpdateFieldDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.exception.domains.BusinessException;
@@ -37,10 +38,9 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public FieldResponseDTO create(CreateFieldDTO dto) {
-        FarmResponseDTO farmResponse = farmService.findById(dto.farmId());
-        Farm farm = farmMapper.toEntityFromResponseDto(farmResponse);
+        Farm farm = getFarm(dto.farmId());
 
-        fieldValidations(dto, farm);
+        fieldValidations(dto.area(), farm);
 
         Field field = mapper.toEntity(dto)
                 .setFarm(farm);
@@ -50,8 +50,33 @@ public class FieldServiceImpl implements FieldService {
         return mapper.toResponseDto(savedRepository);
     }
 
-    private void fieldValidations(CreateFieldDTO dto, Farm farm) {
-        if (dto.area() > (farm.getSize() * 0.5)) {
+    @Override
+    public FieldResponseDTO update(Long id, UpdateFieldDTO dto) {
+        Field existingField = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Field", id));
+
+        Farm farm = getFarm(dto.farmId());
+
+        if (dto.area() != null) {
+            existingField.setArea(dto.area());
+        }
+        if (dto.farmId() != null) {
+            existingField.setFarm(farm);
+        }
+
+        fieldValidations(dto.area(), farm);
+
+        Field savedField = repository.save(existingField);
+        return mapper.toResponseDto(savedField);
+    }
+
+    private Farm getFarm(Long farmId) {
+        FarmResponseDTO farmResponse = farmService.findById(farmId);
+        return farmMapper.toEntityFromResponseDto(farmResponse);
+    }
+
+    private void fieldValidations(Double area, Farm farm) {
+        if (area > (farm.getSize() * 0.5)) {
             throw new BusinessException("Field area cannot exceed 50% of the farm's total size.");
         }
 
@@ -62,7 +87,7 @@ public class FieldServiceImpl implements FieldService {
         double fieldsAreaSum = farm.getFields()
                 .stream()
                 .mapToDouble(Field::getArea)
-                .sum() + dto.area();
+                .sum() + area;
 
         if (fieldsAreaSum > farm.getSize()) {
             throw new BusinessException(farm.getName() + " Farm had insufficient space for this field.");
