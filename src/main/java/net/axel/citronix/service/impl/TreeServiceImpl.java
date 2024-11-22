@@ -8,6 +8,7 @@ import net.axel.citronix.domain.dtos.tree.TreeResponseDTO;
 import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.domain.entities.Tree;
 import net.axel.citronix.exception.domains.BusinessException;
+import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FieldMapper;
 import net.axel.citronix.mapper.TreeMapper;
 import net.axel.citronix.repository.TreeRepository;
@@ -28,6 +29,14 @@ public class TreeServiceImpl implements TreeService {
     private final TreeMapper mapper;
     private final FieldService fieldService;
     private final FieldMapper fieldMapper;
+
+    @Override
+    public TreeResponseDTO findById(Long id) {
+        Tree tree = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tree", id));
+
+        return mapper.toResponseDto(tree);
+    }
 
     @Override
     public TreeResponseDTO create(CreateTreeDTO dto) {

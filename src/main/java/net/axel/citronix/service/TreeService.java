@@ -5,5 +5,8 @@ import net.axel.citronix.domain.dtos.tree.TreeResponseDTO;
 
 public interface TreeService {
 
+    TreeResponseDTO findById(Long id);
+
     TreeResponseDTO create(CreateTreeDTO dto);
+
 }
