@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @Transactional
@@ -36,6 +37,19 @@ public class TreeServiceImpl implements TreeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tree", id));
 
         return mapper.toResponseDto(tree);
+    }
+
+    @Override
+    public List<TreeResponseDTO> findAll() {
+        List<Tree> treeEntities = repository.findAll();
+
+        if (treeEntities.isEmpty()) {
+            throw new ResourceNotFoundException("No trees found");
+        }
+
+        return treeEntities.stream()
+                .map(mapper::toResponseDto)
+                .toList();
     }
 
     @Override
