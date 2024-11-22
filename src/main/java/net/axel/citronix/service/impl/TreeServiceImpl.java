@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.domain.dtos.tree.CreateTreeDTO;
 import net.axel.citronix.domain.dtos.tree.TreeResponseDTO;
+import net.axel.citronix.domain.dtos.tree.UpdateTreeDTO;
 import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.domain.entities.Tree;
 import net.axel.citronix.exception.domains.BusinessException;
@@ -70,6 +71,32 @@ public class TreeServiceImpl implements TreeService {
         Tree savedTree = repository.save(tree);
 
         return mapper.toResponseDto(savedTree);
+    }
+
+    @Override
+    public TreeResponseDTO update(Long id, UpdateTreeDTO dto) {
+        Tree existingTree = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tree", id));
+
+        Field field = getField(dto.fieldId());
+
+        treeValidations(dto.plantingDate(), field);
+
+        if (dto.plantingDate() != null) {
+            int age = generatedAge(dto.plantingDate());
+            double productivity = generatedProductivity(age);
+
+           existingTree.setPlantingDate(dto.plantingDate())
+                   .setAge(age)
+                   .setProductivity(productivity);
+        }
+        if (dto.fieldId() != null) {
+            existingTree.setField(field);
+        }
+
+        Tree updatedTree = repository.save(existingTree);
+
+        return mapper.toResponseDto(updatedTree);
     }
 
     private void treeValidations(LocalDate plantingDate, Field field) {
