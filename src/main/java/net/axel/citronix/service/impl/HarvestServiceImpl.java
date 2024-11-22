@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.harvest.CreateHarvestDTO;
 import net.axel.citronix.domain.dtos.harvest.HarvestResponseDTO;
+import net.axel.citronix.domain.dtos.harvest.UpdateHarvestDTO;
 import net.axel.citronix.domain.entities.Harvest;
 import net.axel.citronix.domain.enums.Season;
 import net.axel.citronix.exception.domains.BusinessException;
@@ -62,6 +63,32 @@ public class HarvestServiceImpl implements HarvestService {
 
         return mapper.toResponseDto(savedHarvest);
     }
+
+    @Override
+    public HarvestResponseDTO update(Long id, UpdateHarvestDTO dto) {
+        Harvest existingHarvest = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Harvest", id));
+
+        if (dto.harvestDate() != null && dto.harvestDate() != existingHarvest.getHarvestDate()) {
+            Season season = determineSeason(dto.harvestDate());
+
+            if (repository.existsBySeason(season)) {
+                throw new BusinessException("Already exists a harvest in this season :" + season);
+            }
+
+            existingHarvest.setHarvestDate(dto.harvestDate())
+                    .setSeason(season);
+        }
+        if (dto.totalQuantity() != null) {
+            existingHarvest.setTotalQuantity(dto.totalQuantity());
+        }
+
+        Harvest updatedHarvest = repository.save(existingHarvest);
+
+        return mapper.toResponseDto(updatedHarvest);
+    }
+
+
 
     private Season determineSeason(LocalDate date) {
         int month = date.getMonthValue();
