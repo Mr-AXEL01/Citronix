@@ -7,6 +7,7 @@ import net.axel.citronix.domain.dtos.harvest.HarvestResponseDTO;
 import net.axel.citronix.domain.entities.Harvest;
 import net.axel.citronix.domain.enums.Season;
 import net.axel.citronix.exception.domains.BusinessException;
+import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.HarvestMapper;
 import net.axel.citronix.repository.HarvestRepository;
 import net.axel.citronix.service.HarvestService;
@@ -22,6 +23,14 @@ public class HarvestServiceImpl implements HarvestService {
     
     private final HarvestRepository repository;
     private final HarvestMapper mapper;
+
+    @Override
+    public HarvestResponseDTO findById(Long id) {
+        Harvest harvest = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Harvest", id));
+
+        return mapper.toResponseDto(harvest);
+    }
     
     @Override
     public HarvestResponseDTO create(CreateHarvestDTO dto) {
