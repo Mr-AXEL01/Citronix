@@ -16,4 +16,5 @@ public interface FarmService {
 
     FarmResponseDTO update(Long id, UpdateFarmDTO dto);
 
+    void delete(Long id);
 }

@@ -78,6 +78,11 @@ public class FarmServiceImpl implements FarmService {
         return mapper.toResponseDto(savedFarm);
     }
 
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
     private <T> T getDefult(T v, T dv) {
         return v != null ? v : dv;
     }
