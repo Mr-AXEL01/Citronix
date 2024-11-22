@@ -88,7 +88,10 @@ public class HarvestServiceImpl implements HarvestService {
         return mapper.toResponseDto(updatedHarvest);
     }
 
-
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 
     private Season determineSeason(LocalDate date) {
         int month = date.getMonthValue();
