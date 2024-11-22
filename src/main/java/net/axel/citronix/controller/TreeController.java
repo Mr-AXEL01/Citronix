@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(TreeController.CONTROLLER_PATH)
 
@@ -23,6 +25,12 @@ public class TreeController {
     public ResponseEntity<TreeResponseDTO> findById(@PathVariable("id") Long id) {
         TreeResponseDTO tree = service.findById(id);
         return new ResponseEntity<>(tree, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TreeResponseDTO>> findAll() {
+        List<TreeResponseDTO> trees = service.findAll();
+        return ResponseEntity.ok(trees);
     }
 
     @PostMapping
