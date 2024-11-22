@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(FarmController.CONTROLLER_PATH)
 
@@ -23,6 +25,12 @@ public class FarmController {
     public ResponseEntity<FarmResponseDTO> findById(@PathVariable("id") Long id) {
         FarmResponseDTO farm = service.findById(id);
         return new ResponseEntity<>(farm, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<FarmResponseDTO>> findAll() {
+        List<FarmResponseDTO> farms = service.findAll();
+        return ResponseEntity.ok(farms);
     }
 
     @PostMapping
