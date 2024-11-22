@@ -83,8 +83,8 @@ public class FieldServiceImpl implements FieldService {
 
         fieldValidations(dto.area(), farm);
 
-        Field savedField = repository.save(existingField);
-        return mapper.toResponseDto(savedField);
+        Field updatedField = repository.save(existingField);
+        return mapper.toResponseDto(updatedField);
     }
 
     @Override
