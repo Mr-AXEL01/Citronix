@@ -14,6 +14,7 @@ import net.axel.citronix.service.HarvestService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -30,6 +31,19 @@ public class HarvestServiceImpl implements HarvestService {
                 .orElseThrow(() -> new ResourceNotFoundException("Harvest", id));
 
         return mapper.toResponseDto(harvest);
+    }
+
+    @Override
+    public List<HarvestResponseDTO> findAll() {
+        List<Harvest> harvestEntities = repository.findAll();
+
+        if (harvestEntities.isEmpty()) {
+            throw new ResourceNotFoundException("No harvest found.");
+        }
+
+        return harvestEntities.stream()
+                .map(mapper::toResponseDto)
+                .toList();
     }
     
     @Override
