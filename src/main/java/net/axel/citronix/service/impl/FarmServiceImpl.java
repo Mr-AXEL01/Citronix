@@ -13,6 +13,7 @@ import net.axel.citronix.service.FarmService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -30,6 +31,19 @@ public class FarmServiceImpl implements FarmService {
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", id));
 
         return mapper.toResponseDto(farm);
+    }
+
+    @Override
+    public List<FarmResponseDTO> findAll() {
+        List<Farm> farmEntities = repository.findAll();
+
+        if (farmEntities.isEmpty()) {
+            throw  new ResourceNotFoundException("No farms founds.");
+        }
+
+        return farmEntities.stream()
+                .map(mapper::toResponseDto)
+                .toList();
     }
 
     @Override
