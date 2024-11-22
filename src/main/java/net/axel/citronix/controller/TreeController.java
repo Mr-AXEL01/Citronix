@@ -7,10 +7,7 @@ import net.axel.citronix.domain.dtos.tree.TreeResponseDTO;
 import net.axel.citronix.service.TreeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(TreeController.CONTROLLER_PATH)
@@ -21,6 +18,12 @@ public class TreeController {
     public final static String CONTROLLER_PATH = "/api/v1/trees";
 
     private final TreeService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TreeResponseDTO> findById(@PathVariable("id") Long id) {
+        TreeResponseDTO tree = service.findById(id);
+        return new ResponseEntity<>(tree, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<TreeResponseDTO> create(@RequestBody @Valid CreateTreeDTO dto) {
