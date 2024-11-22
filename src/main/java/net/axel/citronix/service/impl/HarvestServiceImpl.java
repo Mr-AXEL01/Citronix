@@ -35,7 +35,9 @@ public class HarvestServiceImpl implements HarvestService {
                 .setSeason(season)
                 .setTotalQuantity(0.0);
 
-        return mapper.toResponseDto(harvest);
+        Harvest savedHarvest = repository.save(harvest);
+
+        return mapper.toResponseDto(savedHarvest);
     }
 
     private Season determineSeason(LocalDate date) {
