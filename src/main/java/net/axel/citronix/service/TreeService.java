@@ -15,4 +15,6 @@ public interface TreeService {
     TreeResponseDTO create(CreateTreeDTO dto);
 
     TreeResponseDTO update(Long id, UpdateTreeDTO dto);
+
+    void delete(Long id);
 }

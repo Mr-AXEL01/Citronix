@@ -99,6 +99,11 @@ public class TreeServiceImpl implements TreeService {
         return mapper.toResponseDto(updatedTree);
     }
 
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
     private void treeValidations(LocalDate plantingDate, Field field) {
         double fieldArea = field.getArea();
         int fieldSize = field.getTrees().size();
