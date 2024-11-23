@@ -6,6 +6,7 @@ import net.axel.citronix.domain.enums.Season;
 import java.time.LocalDate;
 
 public record CreateHarvestDTO(
+        @NotNull Long fieldId,
         @NotNull LocalDate harvestDate
 ) {
 }
