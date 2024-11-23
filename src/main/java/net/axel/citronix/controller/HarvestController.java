@@ -7,10 +7,7 @@ import net.axel.citronix.domain.dtos.harvest.HarvestResponseDTO;
 import net.axel.citronix.service.HarvestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(HarvestController.CONTROLLER_PATH)
@@ -26,5 +23,11 @@ public class HarvestController {
     public ResponseEntity<HarvestResponseDTO> create(@RequestBody @Valid CreateHarvestDTO dto) {
         HarvestResponseDTO harvest = service.create(dto);
         return new ResponseEntity<>(harvest, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
