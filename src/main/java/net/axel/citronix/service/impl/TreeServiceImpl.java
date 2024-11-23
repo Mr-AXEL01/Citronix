@@ -21,6 +21,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static net.axel.citronix.domain.entities.Tree.getaDouble;
+import static net.axel.citronix.domain.entities.Tree.getaInteger;
+
 @Service
 @Transactional
 
@@ -94,9 +97,7 @@ public class TreeServiceImpl implements TreeService {
             existingTree.setField(field);
         }
 
-        Tree updatedTree = repository.save(existingTree);
-
-        return mapper.toResponseDto(updatedTree);
+        return mapper.toResponseDto(existingTree);
     }
 
     @Override
@@ -119,7 +120,7 @@ public class TreeServiceImpl implements TreeService {
     }
 
     private int generatedAge(LocalDate plantingDate) {
-        return (int) ChronoUnit.YEARS.between(plantingDate, LocalDate.now());
+        return getaInteger(plantingDate);
     }
 
     private Field getField(Long fieldId) {
@@ -128,12 +129,7 @@ public class TreeServiceImpl implements TreeService {
     }
 
     private double generatedProductivity(int age) {
-        return switch (age) {
-            case 1, 2 -> 2.5;
-            case 3, 4, 5, 6, 7, 8, 9, 10 -> 12.0;
-            case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 -> 20.0;
-            default -> 0.0;
-        };
+        return getaDouble(age);
     }
 
 }
