@@ -27,10 +27,9 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public FarmResponseDTO findById(Long id) {
-        Farm farm = repository.findById(id)
+        return repository.findById(id)
+                .map(mapper::toResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", id));
-
-        return mapper.toResponseDto(farm);
     }
 
     @Override
@@ -74,8 +73,7 @@ public class FarmServiceImpl implements FarmService {
             existingFarm.setCreationDate(dto.creationDate());
         }
 
-        Farm savedFarm = repository.save(existingFarm);
-        return mapper.toResponseDto(savedFarm);
+        return mapper.toResponseDto(existingFarm);
     }
 
     @Override
