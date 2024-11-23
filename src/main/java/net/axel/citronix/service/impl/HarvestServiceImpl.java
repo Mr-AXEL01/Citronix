@@ -21,6 +21,7 @@ import net.axel.citronix.service.HarvestService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 @Service
@@ -58,8 +59,9 @@ public class HarvestServiceImpl implements HarvestService {
     public HarvestResponseDTO create(CreateHarvestDTO dto) {
         Field field = fieldService.findEntityById(dto.fieldId());
         Season season = determineSeason(dto.harvestDate());
+        int year = dto.harvestDate().getYear();
 
-        if (repository.existsBySeason(season)) {
+        if (repository.existsBySeasonAndYear(season, year)) {
             throw new BusinessException("Already exists a harvest in this season :" + season);
         }
 
@@ -96,8 +98,9 @@ public class HarvestServiceImpl implements HarvestService {
 
         if (dto.harvestDate() != null && dto.harvestDate() != existingHarvest.getHarvestDate()) {
             Season season = determineSeason(dto.harvestDate());
+            int year = dto.harvestDate().getYear();
 
-            if (repository.existsBySeason(season)) {
+            if (repository.existsBySeasonAndYear(season, year)) {
                 throw new BusinessException("Already exists a harvest in this season :" + season);
             }
 
