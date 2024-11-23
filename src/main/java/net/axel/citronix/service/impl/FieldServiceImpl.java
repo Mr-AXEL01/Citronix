@@ -34,10 +34,15 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public FieldResponseDTO findById(Long id) {
-        Field field = repository.findById(id)
+        return repository.findById(id)
+                .map(mapper::toResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Field", id));
+    }
 
-        return mapper.toResponseDto(field);
+    @Override
+    public Field findEntityById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Field", id));
     }
 
     @Override
@@ -83,8 +88,7 @@ public class FieldServiceImpl implements FieldService {
 
         fieldValidations(dto.area(), farm);
 
-        Field updatedField = repository.save(existingField);
-        return mapper.toResponseDto(updatedField);
+        return mapper.toResponseDto(existingField);
     }
 
     @Override
