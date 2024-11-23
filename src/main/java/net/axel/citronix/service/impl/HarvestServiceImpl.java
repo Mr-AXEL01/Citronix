@@ -2,15 +2,21 @@ package net.axel.citronix.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import net.axel.citronix.domain.dtos.field.FieldResponseDTO;
 import net.axel.citronix.domain.dtos.harvest.CreateHarvestDTO;
 import net.axel.citronix.domain.dtos.harvest.HarvestResponseDTO;
 import net.axel.citronix.domain.dtos.harvest.UpdateHarvestDTO;
+import net.axel.citronix.domain.entities.Field;
 import net.axel.citronix.domain.entities.Harvest;
+import net.axel.citronix.domain.entities.HarvestDetail;
+import net.axel.citronix.domain.entities.Tree;
 import net.axel.citronix.domain.enums.Season;
 import net.axel.citronix.exception.domains.BusinessException;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.HarvestMapper;
+import net.axel.citronix.repository.HarvestDetailRepository;
 import net.axel.citronix.repository.HarvestRepository;
+import net.axel.citronix.service.FieldService;
 import net.axel.citronix.service.HarvestService;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +28,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class HarvestServiceImpl implements HarvestService {
-    
+
     private final HarvestRepository repository;
     private final HarvestMapper mapper;
+    private final FieldService fieldService;
 
     @Override
     public HarvestResponseDTO findById(Long id) {
@@ -46,21 +53,39 @@ public class HarvestServiceImpl implements HarvestService {
                 .map(mapper::toResponseDto)
                 .toList();
     }
-    
+
     @Override
     public HarvestResponseDTO create(CreateHarvestDTO dto) {
+        Field field = fieldService.findEntityById(dto.fieldId());
         Season season = determineSeason(dto.harvestDate());
 
         if (repository.existsBySeason(season)) {
             throw new BusinessException("Already exists a harvest in this season :" + season);
         }
 
+
+        double total = field.getTrees().stream()
+                .mapToDouble(tree -> {
+                    int age = tree.getAge(tree.getPlantingDate());
+                    return tree.getProductivity(age);
+                })
+                .sum();
+
         Harvest harvest = mapper.toEntity(dto)
                 .setSeason(season)
-                .setTotalQuantity(0.0);
+                .setTotalQuantity(total);
+
+        List<HarvestDetail> harvestDetails = field.getTrees()
+                .stream()
+                .map(tree -> {
+                    int age = tree.getAge(tree.getPlantingDate());
+                    return new HarvestDetail(tree, harvest, tree.getProductivity(age));
+                })
+                .toList();
+
+        harvest.setHarvestDetails(harvestDetails);
 
         Harvest savedHarvest = repository.save(harvest);
-
         return mapper.toResponseDto(savedHarvest);
     }
 
@@ -83,9 +108,7 @@ public class HarvestServiceImpl implements HarvestService {
             existingHarvest.setTotalQuantity(dto.totalQuantity());
         }
 
-        Harvest updatedHarvest = repository.save(existingHarvest);
-
-        return mapper.toResponseDto(updatedHarvest);
+        return mapper.toResponseDto(existingHarvest);
     }
 
     @Override
