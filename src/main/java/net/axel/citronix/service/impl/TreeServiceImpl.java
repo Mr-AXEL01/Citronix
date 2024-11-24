@@ -117,6 +117,10 @@ public class TreeServiceImpl implements TreeService {
         if (month < 3 || month > 5) {
             throw new BusinessException("Trees can only be planted between March and May.");
         }
+
+        if (plantingDate.isBefore(field.getFarm().getCreationDate())) {
+            throw new BusinessException("The planting date of the tree can't before the creation date of the farm");
+        }
     }
 
     private int generatedAge(LocalDate plantingDate) {
