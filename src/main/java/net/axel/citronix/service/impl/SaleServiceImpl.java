@@ -95,6 +95,14 @@ public class SaleServiceImpl implements SaleService {
         return mapper.toResponseDto(existingSale);
     }
 
+    @Override
+    public void delete(Long id) {
+        if (repository.existsById(id)) {
+            throw new ResourceNotFoundException("Can't delete this Cause it's not found.");
+        }
+        repository.deleteById(id);
+    }
+
     private Harvest getHarvest(Long harvestId) {
         HarvestResponseDTO harvestResponse = harvestService.findById(harvestId);
         Harvest harvest = harvestMapper.toEntityFromResponseDto(harvestResponse);
