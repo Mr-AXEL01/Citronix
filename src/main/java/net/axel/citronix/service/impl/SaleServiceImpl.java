@@ -92,7 +92,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public void delete(Long id) {
-        if (repository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Can't delete this Cause it's not found.");
         }
         repository.deleteById(id);
