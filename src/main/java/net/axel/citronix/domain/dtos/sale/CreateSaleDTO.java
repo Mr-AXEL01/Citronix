@@ -11,7 +11,7 @@ public record CreateSaleDTO(
         @NotNull LocalDate date,
 
         @Positive(message = "Can't sold for free.")
-        @NotNull Double unitePrice,
+        @NotNull Double unitPrice,
 
         @NotBlank String client,
 

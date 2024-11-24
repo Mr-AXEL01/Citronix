@@ -28,7 +28,18 @@ public class Sale implements Serializable {
 
     private String client;
 
+    @Transient
+    private Double income;
+
     @ManyToOne
     @JoinColumn(name = "harvest_id", nullable = false)
     private Harvest harvest;
+
+    public Double getIncome() {
+        if (harvest != null && harvest.getTotalQuantity() != null && unitPrice != null) {
+            return harvest.getTotalQuantity() * unitPrice;
+        }
+        return null;
+    }
+
 }

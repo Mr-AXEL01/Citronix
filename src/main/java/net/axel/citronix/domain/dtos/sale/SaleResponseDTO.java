@@ -16,6 +16,8 @@ public record SaleResponseDTO(
 
         @NotBlank String client,
 
-        EmbeddedHarvestDTO harvest
+        EmbeddedHarvestDTO harvest,
+
+        @NotNull Double income
 ) {
 }

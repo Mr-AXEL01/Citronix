@@ -51,7 +51,7 @@ public class SaleServiceImpl implements SaleService {
 
         checkIfHarvestSold(harvest);
 
-        validateSaleDate(dto.date().isBefore(harvest.getHarvestDate()), "The Sale date cant be before the harvest date.");
+        validateBusinessLogic(dto.date().isBefore(harvest.getHarvestDate()), "The Sale date cant be before the harvest date.");
 
         Sale sale = mapper.toEntity(dto)
                 .setHarvest(harvest);
@@ -79,7 +79,7 @@ public class SaleServiceImpl implements SaleService {
         }
 
         if (dto.date() != null && !dto.date().equals(existingSale.getDate())) {
-            validateSaleDate(dto.date().isBefore(existingSale.getHarvest().getHarvestDate()), "The Sale date cant be before the harvest date.");
+            validateBusinessLogic(dto.date().isBefore(existingSale.getHarvest().getHarvestDate()), "The Sale date cant be before the harvest date.");
             existingSale.setDate(dto.date());
         }
 
@@ -105,10 +105,10 @@ public class SaleServiceImpl implements SaleService {
     }
 
     private void checkIfHarvestSold(Harvest harvest) {
-        validateSaleDate(repository.existsByHarvest(harvest), "This harvest is already sold.");
+        validateBusinessLogic(repository.existsByHarvest(harvest), "This harvest is already sold.");
     }
 
-    private void validateSaleDate(boolean statement, String message) {
+    private void validateBusinessLogic(boolean statement, String message) {
         if (statement) {
             throw new BusinessException(message);
         }
