@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.harvest.CreateHarvestDTO;
 import net.axel.citronix.domain.dtos.harvest.HarvestResponseDTO;
+import net.axel.citronix.domain.dtos.harvest.UpdateHarvestDTO;
 import net.axel.citronix.service.HarvestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,13 @@ public class HarvestController {
     public ResponseEntity<HarvestResponseDTO> create(@RequestBody @Valid CreateHarvestDTO dto) {
         HarvestResponseDTO harvest = service.create(dto);
         return new ResponseEntity<>(harvest, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HarvestResponseDTO> update(@PathVariable("id") Long id,
+                                                     @RequestBody @Valid UpdateHarvestDTO dto) {
+        HarvestResponseDTO updatedHarvest = service.update(id, dto);
+        return ResponseEntity.ok(updatedHarvest);
     }
 
     @DeleteMapping("/{id}")
