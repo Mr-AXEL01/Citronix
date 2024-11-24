@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(HarvestController.CONTROLLER_PATH)
 
@@ -23,6 +25,12 @@ public class HarvestController {
     public ResponseEntity<HarvestResponseDTO> findById(@PathVariable("id") Long id) {
         HarvestResponseDTO harvest = service.findById(id);
         return ResponseEntity.ok(harvest);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<HarvestResponseDTO>> findAll() {
+        List<HarvestResponseDTO> harvests = service.findAll();
+        return ResponseEntity.ok(harvests);
     }
     
     @PostMapping
