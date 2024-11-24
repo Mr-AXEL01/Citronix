@@ -18,6 +18,12 @@ public class HarvestController {
     public final static String CONTROLLER_PATH = "/api/v1/harvests";
 
     private final HarvestService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HarvestResponseDTO> findById(@PathVariable("id") Long id) {
+        HarvestResponseDTO harvest = service.findById(id);
+        return ResponseEntity.ok(harvest);
+    }
     
     @PostMapping
     public ResponseEntity<HarvestResponseDTO> create(@RequestBody @Valid CreateHarvestDTO dto) {
