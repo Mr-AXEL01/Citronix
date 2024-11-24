@@ -2,7 +2,7 @@ package net.axel.citronix.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.harvestDetail.CreateHarvestDetailDTO;
+import net.axel.citronix.domain.dtos.harvestDetail.HarvestDetailRequestDTO;
 import net.axel.citronix.domain.dtos.harvestDetail.HarvestDetailResponseDTO;
 import net.axel.citronix.domain.embeddeds.HarvestDetailKey;
 import net.axel.citronix.domain.entities.Harvest;
@@ -23,7 +23,7 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
     private final HarvestDetailMapper mapper;
 
     @Override
-    public HarvestDetailResponseDTO update(CreateHarvestDetailDTO dto) {
+    public HarvestDetailResponseDTO update(HarvestDetailRequestDTO dto) {
         HarvestDetailKey id = new HarvestDetailKey(dto.treeId(), dto.harvestId());
         HarvestDetail existingHarvestDetail = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("HarvestDetail", id));

@@ -2,7 +2,7 @@ package net.axel.citronix.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.axel.citronix.domain.dtos.harvestDetail.CreateHarvestDetailDTO;
+import net.axel.citronix.domain.dtos.harvestDetail.HarvestDetailRequestDTO;
 import net.axel.citronix.domain.dtos.harvestDetail.HarvestDetailResponseDTO;
 import net.axel.citronix.service.HarvestDetailService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class HarvestDetailController {
     private final HarvestDetailService service;
 
     @PutMapping
-    public ResponseEntity<HarvestDetailResponseDTO> update(@RequestBody @Valid CreateHarvestDetailDTO dto) {
+    public ResponseEntity<HarvestDetailResponseDTO> update(@RequestBody @Valid HarvestDetailRequestDTO dto) {
         HarvestDetailResponseDTO updatedHarvestDetail = service.update(dto);
         return ResponseEntity.ok(updatedHarvestDetail);
     }
