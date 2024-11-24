@@ -39,13 +39,8 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public List<SaleResponseDTO> findAll() {
-        List<Sale> saleEntities = repository.findAll();
-
-        if(saleEntities.isEmpty()) {
-            throw new ResourceNotFoundException("No sales was found.");
-        }
-
-        return saleEntities.stream()
+        return repository.findAll()
+                .stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }
@@ -54,13 +49,9 @@ public class SaleServiceImpl implements SaleService {
     public SaleResponseDTO create(CreateSaleDTO dto) {
         Harvest harvest = getHarvest(dto.harvestId());
 
-        if (repository.existsByHarvest(harvest)) {
-            throw new BusinessException("This harvest is already sold.");
-        }
+        checkIfHarvestSold(harvest);
 
-        if (dto.date().isBefore(harvest.getHarvestDate())) {
-            throw new BusinessException("The Sale date cant be before the harvest date.");
-        }
+        validateSaleDate(dto.date().isBefore(harvest.getHarvestDate()), "The Sale date cant be before the harvest date.");
 
         Sale sale = mapper.toEntity(dto)
                 .setHarvest(harvest);
@@ -76,18 +67,22 @@ public class SaleServiceImpl implements SaleService {
                 .orElseThrow(() -> new ResourceNotFoundException("No sale found with the ID provided"));
 
         if (dto.harvestId() != null && !dto.harvestId().equals(existingSale.getHarvest().getId())) {
-            Harvest newharvest = getHarvest(dto.harvestId());
-            existingSale.setHarvest(newharvest);
+            Harvest harvest = getHarvest(dto.harvestId());
+
+            checkIfHarvestSold(harvest);
+
+            existingSale.setHarvest(harvest);
         }
+
         if (dto.client() != null && !dto.client().equals(existingSale.getClient())) {
             existingSale.setClient(dto.client());
         }
+
         if (dto.date() != null && !dto.date().equals(existingSale.getDate())) {
-            if (dto.date().isBefore(existingSale.getHarvest().getHarvestDate())) {
-                throw new BusinessException("The Sale date cant be before the harvest date.");
-            }
+            validateSaleDate(dto.date().isBefore(existingSale.getHarvest().getHarvestDate()), "The Sale date cant be before the harvest date.");
             existingSale.setDate(dto.date());
         }
+
         if (dto.unitePrice() != null && !dto.unitePrice().equals(existingSale.getUnitPrice())) {
             existingSale.setUnitPrice(dto.unitePrice());
         }
@@ -104,8 +99,18 @@ public class SaleServiceImpl implements SaleService {
     }
 
     private Harvest getHarvest(Long harvestId) {
-        HarvestResponseDTO harvestResponse = harvestService.findById(harvestId);
-        Harvest harvest = harvestMapper.toEntityFromResponseDto(harvestResponse);
-        return harvest;
+        return harvestMapper.toEntityFromResponseDto(
+                harvestService.findById(harvestId)
+        );
+    }
+
+    private void checkIfHarvestSold(Harvest harvest) {
+        validateSaleDate(repository.existsByHarvest(harvest), "This harvest is already sold.");
+    }
+
+    private void validateSaleDate(boolean statement, String message) {
+        if (statement) {
+            throw new BusinessException(message);
+        }
     }
 }
