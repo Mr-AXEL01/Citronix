@@ -107,9 +107,6 @@ public class HarvestServiceImpl implements HarvestService {
             existingHarvest.setHarvestDate(dto.harvestDate())
                     .setSeason(season);
         }
-        if (dto.totalQuantity() != null) {
-            existingHarvest.setTotalQuantity(dto.totalQuantity());
-        }
 
         return mapper.toResponseDto(existingHarvest);
     }
