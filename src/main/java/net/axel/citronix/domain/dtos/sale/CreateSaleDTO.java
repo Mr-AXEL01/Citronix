@@ -11,6 +11,8 @@ public record CreateSaleDTO(
 
         @NotNull Double unitePrice,
 
-        @NotBlank String client
+        @NotBlank String client,
+
+        @NotNull Long harvestId
 ) {
 }
