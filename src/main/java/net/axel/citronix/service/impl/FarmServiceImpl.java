@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.farm.CreateFarmDTO;
 import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.farm.FarmSearchDTO;
 import net.axel.citronix.domain.dtos.farm.UpdateFarmDTO;
 import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
@@ -43,6 +44,11 @@ public class FarmServiceImpl implements FarmService {
         return farms.stream()
                 .map(mapper::toResponseDto)
                 .toList();
+    }
+
+    @Override
+    public List<FarmResponseDTO> searchFarms(FarmSearchDTO criteria) {
+        return repository.searchFarms(criteria);
     }
 
     @Override
