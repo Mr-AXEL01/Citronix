@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.axel.citronix.domain.dtos.farm.CreateFarmDTO;
 import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
+import net.axel.citronix.domain.dtos.farm.FarmSearchDTO;
 import net.axel.citronix.domain.dtos.farm.UpdateFarmDTO;
+import net.axel.citronix.domain.entities.Farm;
 import net.axel.citronix.service.FarmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,12 @@ public class FarmController {
     public final static String CONTROLLER_PATH = "/api/v1/farms";
 
     private final FarmService service;
+
+    @PostMapping("/search")
+    public ResponseEntity<List<FarmResponseDTO>> searchFarms(@RequestBody FarmSearchDTO criteria) {
+        List<FarmResponseDTO> farms = service.searchFarms(criteria);
+        return ResponseEntity.ok(farms);
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<FarmResponseDTO> findById(@PathVariable("id") Long id) {
