@@ -15,6 +15,9 @@ import net.axel.citronix.mapper.FieldMapper;
 import net.axel.citronix.repository.FieldRepository;
 import net.axel.citronix.service.FarmService;
 import net.axel.citronix.service.FieldService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -46,14 +49,11 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public List<FieldResponseDTO> findAll() {
-        List<Field> fieldEntities = repository.findAll();
+    public List<FieldResponseDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Field> fields = repository.findAll(pageable);
 
-        if (fieldEntities.isEmpty()) {
-            throw new ResourceNotFoundException("No fields founds.");
-        }
-
-        return fieldEntities.stream()
+        return fields.stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }
@@ -93,6 +93,9 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Can't remove non-exists field.");
+        }
         repository.deleteById(id);
     }
 

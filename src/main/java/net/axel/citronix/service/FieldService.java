@@ -17,7 +17,7 @@ public interface FieldService {
 
     Field findEntityById(Long id);
 
-    List<FieldResponseDTO> findAll();
+    List<FieldResponseDTO> findAll(int page, int size);
 
     void delete(Long id);
 }

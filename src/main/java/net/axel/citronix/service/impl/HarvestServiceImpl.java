@@ -18,6 +18,9 @@ import net.axel.citronix.repository.HarvestDetailRepository;
 import net.axel.citronix.repository.HarvestRepository;
 import net.axel.citronix.service.FieldService;
 import net.axel.citronix.service.HarvestService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,21 +39,19 @@ public class HarvestServiceImpl implements HarvestService {
 
     @Override
     public HarvestResponseDTO findById(Long id) {
-        Harvest harvest = repository.findById(id)
+        return repository.findById(id)
+                .map(mapper::toResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Harvest", id));
 
-        return mapper.toResponseDto(harvest);
     }
 
     @Override
-    public List<HarvestResponseDTO> findAll() {
-        List<Harvest> harvestEntities = repository.findAll();
+    public List<HarvestResponseDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        if (harvestEntities.isEmpty()) {
-            throw new ResourceNotFoundException("No harvest found.");
-        }
+        Page<Harvest> harvests = repository.findAll(pageable);
 
-        return harvestEntities.stream()
+        return harvests.stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }
@@ -113,6 +114,9 @@ public class HarvestServiceImpl implements HarvestService {
 
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Can't delete non- exists harvest");
+        }
         repository.deleteById(id);
     }
 

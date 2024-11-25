@@ -10,7 +10,7 @@ public interface TreeService {
 
     TreeResponseDTO findById(Long id);
 
-    List<TreeResponseDTO> findAll();
+    List<TreeResponseDTO> findAll(int page, int size);
 
     TreeResponseDTO create(CreateTreeDTO dto);
 

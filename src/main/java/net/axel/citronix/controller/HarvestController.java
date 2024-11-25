@@ -29,8 +29,9 @@ public class HarvestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HarvestResponseDTO>> findAll() {
-        List<HarvestResponseDTO> harvests = service.findAll();
+    public ResponseEntity<List<HarvestResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "3") int size) {
+        List<HarvestResponseDTO> harvests = service.findAll(page, size);
         return ResponseEntity.ok(harvests);
     }
     

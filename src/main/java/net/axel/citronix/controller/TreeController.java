@@ -29,8 +29,9 @@ public class TreeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TreeResponseDTO>> findAll() {
-        List<TreeResponseDTO> trees = service.findAll();
+    public ResponseEntity<List<TreeResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "3") int size) {
+        List<TreeResponseDTO> trees = service.findAll(page, size);
         return ResponseEntity.ok(trees);
     }
 

@@ -10,6 +10,9 @@ import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;
 import net.axel.citronix.repository.FarmRepository;
 import net.axel.citronix.service.FarmService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,14 +36,11 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public List<FarmResponseDTO> findAll() {
-        List<Farm> farmEntities = repository.findAll();
-
-        if (farmEntities.isEmpty()) {
-            throw  new ResourceNotFoundException("No farms founds.");
-        }
-
-        return farmEntities.stream()
+    public List<FarmResponseDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Farm> farms = repository.findAll(pageable);
+        
+        return farms.stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }
@@ -78,6 +78,9 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Can't remove non-exists farm");
+        }
         repository.deleteById(id);
     }
 

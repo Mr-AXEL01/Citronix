@@ -15,6 +15,9 @@ import net.axel.citronix.mapper.TreeMapper;
 import net.axel.citronix.repository.TreeRepository;
 import net.axel.citronix.service.FieldService;
 import net.axel.citronix.service.TreeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,21 +40,19 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public TreeResponseDTO findById(Long id) {
-        Tree tree = repository.findById(id)
+        return repository.findById(id)
+                .map(mapper::toResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Tree", id));
 
-        return mapper.toResponseDto(tree);
     }
 
     @Override
-    public List<TreeResponseDTO> findAll() {
-        List<Tree> treeEntities = repository.findAll();
+    public List<TreeResponseDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        if (treeEntities.isEmpty()) {
-            throw new ResourceNotFoundException("No trees found");
-        }
+        Page<Tree> trees = repository.findAll(pageable);
 
-        return treeEntities.stream()
+        return trees.stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }
@@ -102,6 +103,9 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Can't delete non-exists Tree.");
+        }
         repository.deleteById(id);
     }
 

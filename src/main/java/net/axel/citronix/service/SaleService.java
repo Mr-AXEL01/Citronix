@@ -14,7 +14,7 @@ public interface SaleService {
 
     SaleResponseDTO findById(Long id);
 
-    List<SaleResponseDTO> findAll();
+    List<SaleResponseDTO> findAll(int page, int size);
 
     void delete(Long id);
 }

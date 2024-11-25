@@ -29,8 +29,9 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SaleResponseDTO>> findAll() {
-        List<SaleResponseDTO> sales = service.findAll();
+    public ResponseEntity<List<SaleResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "3") int size) {
+        List<SaleResponseDTO> sales = service.findAll(page, size);
         return ResponseEntity.ok(sales);
     }
 

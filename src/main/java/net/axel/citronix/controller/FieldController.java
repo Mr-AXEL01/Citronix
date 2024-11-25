@@ -35,8 +35,9 @@ public class FieldController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FieldResponseDTO>> findAll() {
-        List<FieldResponseDTO> fields = service.findAll();
+    public ResponseEntity<List<FieldResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "3") int size) {
+        List<FieldResponseDTO> fields = service.findAll(page, size);
         return ResponseEntity.ok(fields);
     }
 

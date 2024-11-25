@@ -28,8 +28,9 @@ public class FarmController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FarmResponseDTO>> findAll() {
-        List<FarmResponseDTO> farms = service.findAll();
+    public ResponseEntity<List<FarmResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "3") int size) {
+        List<FarmResponseDTO> farms = service.findAll(page, size);
         return ResponseEntity.ok(farms);
     }
 

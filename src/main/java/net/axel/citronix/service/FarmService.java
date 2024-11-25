@@ -10,7 +10,7 @@ public interface FarmService {
 
     FarmResponseDTO findById(Long id);
 
-    List<FarmResponseDTO> findAll();
+    List<FarmResponseDTO> findAll(int page, int size);
 
     FarmResponseDTO create(CreateFarmDTO dto);
 

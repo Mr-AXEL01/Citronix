@@ -15,6 +15,9 @@ import net.axel.citronix.mapper.SaleMapper;
 import net.axel.citronix.repository.SaleRepository;
 import net.axel.citronix.service.HarvestService;
 import net.axel.citronix.service.SaleService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,9 +41,12 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public List<SaleResponseDTO> findAll() {
-        return repository.findAll()
-                .stream()
+    public List<SaleResponseDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Sale> sales = repository.findAll(pageable);
+
+        return sales.stream()
                 .map(mapper::toResponseDto)
                 .toList();
     }

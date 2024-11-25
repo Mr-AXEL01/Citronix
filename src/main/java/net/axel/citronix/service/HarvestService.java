@@ -10,7 +10,7 @@ public interface HarvestService {
 
     HarvestResponseDTO findById(Long id);
 
-    List<HarvestResponseDTO> findAll();
+    List<HarvestResponseDTO> findAll(int page, int size);
 
     HarvestResponseDTO create(CreateHarvestDTO dto);
 
