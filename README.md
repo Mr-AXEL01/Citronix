@@ -191,4 +191,9 @@ The application implements a centralized error handling mechanism that provides:
 
 ## Contact
 
-Project Link: [https://github.com/Mr-AXEL01/citronix](https://github.com/Mr-AXEL01/citronix)
+- **Project Link**: [https://github.com/Mr-AXEL01/citronix](https://github.com/Mr-AXEL01/citronix)
+- **Email**: abdelhakazrour3@gmail.com
+- **LinkedIn**: [Abdelhak Azrour](https://www.linkedin.com/in/abd-elhaq-azrour/)
+- **X (Twitter)**: [@Mr_AXEL01](https://x.com/Mr_AXEL01)
+
+Feel free to reach out for any questions, suggestions, or collaboration opportunities!
