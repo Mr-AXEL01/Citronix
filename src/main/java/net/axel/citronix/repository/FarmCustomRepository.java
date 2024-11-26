@@ -2,7 +2,6 @@ package net.axel.citronix.repository;
 
 import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
 import net.axel.citronix.domain.dtos.farm.FarmSearchDTO;
-import net.axel.citronix.domain.entities.Farm;
 
 import java.util.List;
 
