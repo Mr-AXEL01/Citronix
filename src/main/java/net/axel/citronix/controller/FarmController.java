@@ -23,8 +23,8 @@ public class FarmController {
 
     private final FarmService service;
 
-    @PostMapping("/search")
-    public ResponseEntity<List<FarmResponseDTO>> searchFarms(@RequestBody FarmSearchDTO criteria) {
+    @GetMapping("/search")
+    public ResponseEntity<List<FarmResponseDTO>> searchFarms(@ModelAttribute FarmSearchDTO criteria) {
         List<FarmResponseDTO> farms = service.searchFarms(criteria);
         return ResponseEntity.ok(farms);
     }
