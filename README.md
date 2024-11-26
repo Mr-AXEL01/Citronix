@@ -3,6 +3,7 @@
 [![Java](https://img.shields.io/badge/Java-21-red.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
 [![Tests](https://img.shields.io/badge/Tests-JUnit%205-orange.svg)](https://junit.org/junit5/)
+[![Docker](https://img.shields.io/badge/Docker-Available-blue.svg)](https://hub.docker.com/r/mraxel01/citronix)
 
 ## About
 
@@ -24,9 +25,9 @@ Citronix is a comprehensive farm management system designed specifically for lem
 ### Tree Management
 - Track planting date and age
 - Calculate productivity based on tree age:
-    - Young trees (<3 years): 2.5 kg/season
-    - Mature trees (3-10 years): 12 kg/season
-    - Old trees (>10 years): 20 kg/season
+  - Young trees (<3 years): 2.5 kg/season
+  - Mature trees (3-10 years): 12 kg/season
+  - Old trees (>10 years): 20 kg/season
 - Maximum density: 100 trees per hectare
 - Planting restricted to March-May period
 
@@ -45,39 +46,102 @@ Citronix is a comprehensive farm management system designed specifically for lem
 ## Technical Stack
 
 - **Backend Framework**: Spring Boot
+- **Database**: PostgreSQL
 - **Architecture**: Layered Architecture
-    - Controllers
-    - Services
-    - Repositories
-    - Entities
+  - Controllers
+  - Services
+  - Repositories
+  - Entities
 - **Data Validation**: Spring Validation
 - **Testing**: JUnit 5 & Mockito
 - **Code Generation**: Lombok with Builder Pattern
 - **Object Mapping**: MapStruct
 - **Exception Handling**: Centralized exception management
+- **Documentation**: Swagger/OpenAPI
+- **Containerization**: Docker
 
 ## Prerequisites
 
-- Java 21 or higher
-- Maven 3.8+
-- Your favorite IDE (IntelliJ IDEA recommended)
-- PostgreSQL (configure in application.properties)
+- Docker and Docker Compose installed
+- Git (optional, for development)
+- Minimum 4GB RAM recommended
+- 10GB free disk space
 
-## Installation
+## Installation and Setup
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/citronix.git
-
-# Navigate to project directory
-cd citronix
-
-# Install dependencies
-mvn clean install
-
-# Run the application
-mvn spring-boot:run
+### 1. Create Environment File
+Create an `.env` file in your project directory:
+```env
+POSTGRES_DB=your_db_name
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+PGADMIN_DEFAULT_EMAIL=your_email@example.com
+PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 ```
+
+### 2. Create Docker Compose File
+Create a `docker-compose.yml` file:
+```yaml
+version: '3.8'
+services:
+  app:
+    image: mraxel01/citronix:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  pgadmin:
+    image: 'dpage/pgadmin4:latest'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - '5050:5050'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+### 3. Run the Application
+```bash
+# Start all services
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+
+### 4. Access the Application
+- **API**: http://localhost:8080
+- **Swagger Documentation**: http://localhost:8080/swagger-ui.html
+- **PgAdmin**: http://localhost:5050
+- **Database**: localhost:5432
 
 ## Project Structure
 
@@ -110,16 +174,7 @@ citronix/
 │   │   │               └── validation/
 │   │   │                   └── validator/
 │   │   └── resources/
-│   │       ├── static/
-│   │       └── templates/
 │   └── test/
-│       └── java/
-│           └── net/
-│               └── axel/
-│                   └── citronix/
-│                       └── service/
-│                           └── impl/
-└── pom.xml
 ```
 
 ## Business Rules
@@ -134,9 +189,9 @@ citronix/
 - Maximum productive age: 20 years
 - Trees can only be planted between March and May
 - Productivity varies by age group:
-    - Young: <3 years
-    - Mature: 3-10 years
-    - Old: >10 years
+  - Young: <3 years
+  - Mature: 3-10 years
+  - Old: >10 years
 
 ### Harvest Rules
 - One harvest per season per field
@@ -146,24 +201,7 @@ citronix/
 
 ## API Documentation
 
-The API documentation is automatically generated using Swagger and is available at:
-```
-http://localhost:8080/swagger-ui.html
-```
-when running the application.
-
-## Testing
-
-```bash
-# Run all tests
-mvn test
-
-# Run specific test class
-mvn test -Dtest=FarmServiceTest
-
-# Generate test coverage report
-mvn verify
-```
+Complete API documentation is available through Swagger UI at `http://localhost:8080/swagger-ui.html` when the application is running.
 
 ## Error Handling
 
@@ -181,19 +219,31 @@ The application implements a centralized error handling mechanism that provides:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## Development Guidelines
+## Troubleshooting
 
-- Follow Java code conventions
-- Write unit tests for new features
-- Update documentation when adding new features
-- Use meaningful commit messages
-- Keep the code clean and maintainable
+### Common Issues
+1. **Port Conflicts**: Ensure ports 8080, 5432, and 5050 are available
+2. **Memory Issues**: Ensure Docker has enough allocated memory
+3. **Database Connection**: Check environment variables in .env file
+
+### Solutions
+```bash
+# Check container logs
+docker-compose logs [service_name]
+
+# Restart services
+docker-compose restart
+
+# Reset everything
+docker-compose down
+docker-compose up -d --force-recreate
+```
 
 ## Contact
 
 - **Project Link**: [https://github.com/Mr-AXEL01/citronix](https://github.com/Mr-AXEL01/citronix)
 - **Email**: abdelhakazrour3@gmail.com
-- **LinkedIn**: [Abdelhak Azrour](https://www.linkedin.com/in/abd-elhaq-azrour/)
-- **X (Twitter)**: [@Mr_AXEL01](https://x.com/Mr_AXEL01)
+- **LinkedIn**: [Abdelhak Azrour](https://www.linkedin.com/in/abdelhak-azrour-0742b1264/)
+- **X (Twitter)**: [@azrourax](https://twitter.com/azrourax)
 
 Feel free to reach out for any questions, suggestions, or collaboration opportunities!
