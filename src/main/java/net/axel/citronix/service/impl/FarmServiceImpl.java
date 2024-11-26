@@ -54,7 +54,7 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmResponseDTO create(CreateFarmDTO dto) {
         Farm farm = mapper.toEntity(dto)
-                .setCreationDate(getDefult(dto.creationDate(), LocalDate.now()));
+                .setCreationDate(dto.creationDate());
 
         Farm savedFarm = repository.save(farm);
 
@@ -90,7 +90,4 @@ public class FarmServiceImpl implements FarmService {
         repository.deleteById(id);
     }
 
-    private <T> T getDefult(T v, T dv) {
-        return v != null ? v : dv;
-    }
 }
