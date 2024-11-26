@@ -59,6 +59,11 @@ public class HarvestServiceImpl implements HarvestService {
     @Override
     public HarvestResponseDTO create(CreateHarvestDTO dto) {
         Field field = fieldService.findEntityById(dto.fieldId());
+
+        if (dto.harvestDate().isBefore(field.getFarm().getCreationDate())) {
+            throw new BusinessException("can't harvest a field in a farm before it's created.");
+        }
+
         Season season = determineSeason(dto.harvestDate());
         int year = dto.harvestDate().getYear();
 
