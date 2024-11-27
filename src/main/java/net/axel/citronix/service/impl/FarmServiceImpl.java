@@ -7,6 +7,7 @@ import net.axel.citronix.domain.dtos.farm.FarmResponseDTO;
 import net.axel.citronix.domain.dtos.farm.FarmSearchDTO;
 import net.axel.citronix.domain.dtos.farm.UpdateFarmDTO;
 import net.axel.citronix.domain.entities.Farm;
+import net.axel.citronix.domain.enums.Season;
 import net.axel.citronix.exception.domains.ResourceNotFoundException;
 import net.axel.citronix.mapper.FarmMapper;
 import net.axel.citronix.repository.FarmRepository;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -40,8 +40,24 @@ public class FarmServiceImpl implements FarmService {
     public List<FarmResponseDTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Farm> farms = repository.findAll(pageable);
-        
+
         return farms.stream()
+                .map(mapper::toResponseDto)
+                .toList();
+    }
+
+    public List<FarmResponseDTO> findFarmsHarvestedInWinter(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Farm> farms = repository.findAll(pageable);
+
+        return farms.stream()
+                .filter(farm -> farm.getFields().stream()
+                        .anyMatch(field -> field.getTrees().stream()
+                                .anyMatch(tree -> tree.getHarvestDetails().stream()
+                                        .anyMatch(harvestDetail -> harvestDetail.getHarvest().getSeason().equals(Season.WINTER))
+                                )
+                        )
+                )
                 .map(mapper::toResponseDto)
                 .toList();
     }
